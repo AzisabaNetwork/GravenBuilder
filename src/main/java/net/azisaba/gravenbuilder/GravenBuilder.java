@@ -60,7 +60,8 @@ public class GravenBuilder {
         var projectType = Objects.requireNonNullElseGet(overrideProjectType, () -> detectProjectType(path));
         config.onDebug.accept("Using project type: " + projectType);
         Volume app = new Volume("/app");
-        client.pullImageCmd(String.format(projectType.getImage(), javaVersion)).exec(new ResultCallback.Adapter<>() {
+        String imageName = String.format(projectType.getImage(), javaVersion);
+        client.pullImageCmd(imageName).exec(new ResultCallback.Adapter<>() {
             private long time = System.currentTimeMillis();
 
             @Override
@@ -86,7 +87,7 @@ public class GravenBuilder {
 
             @Override
             public void onComplete() {
-                config.onDebug.accept("Successfully pulled image 'openjdk:" + javaVersion + "'");
+                config.onDebug.accept("Successfully pulled image '" + imageName + "'");
                 super.onComplete();
             }
 
@@ -95,7 +96,7 @@ public class GravenBuilder {
             }
         }).awaitCompletion();
         config.onDebug.accept("Starting build");
-        CreateContainerResponse container = client.createContainerCmd("openjdk:" + javaVersion)
+        CreateContainerResponse container = client.createContainerCmd(imageName)
                 .withVolumes(app)
                 .withHostConfig(HostConfig.newHostConfig().withBinds(new Bind(path.getAbsolutePath(), app)))
                 .withWorkingDir("/app")
