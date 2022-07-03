@@ -34,11 +34,11 @@ public final class ProjectType {
 
     @Contract(value = "_ -> new", pure = true)
     public static @NotNull ProjectType withCustomCmd(@NotNull String @NotNull ... cmd) {
-        return withCustomCmd("openjdk:17", cmd);
+        return withCustomImageCmd("openjdk:17", cmd);
     }
 
     @Contract(value = "_, _ -> new", pure = true)
-    public static @NotNull ProjectType withCustomCmd(@NotNull String image, @NotNull String @NotNull ... cmd) {
+    public static @NotNull ProjectType withCustomImageCmd(@NotNull String image, @NotNull String @NotNull ... cmd) {
         return new ProjectType("custom", image, cmd);
     }
 
