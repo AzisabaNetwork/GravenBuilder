@@ -57,15 +57,15 @@ public class GravenBuilder {
      */
     @NotNull
     public List<File> buildOn(@NotNull File path, int javaVersion, @Nullable ProjectType overrideProjectType) throws InterruptedException {
-        var projectType = overrideProjectType == null ? detectProjectType(path) : overrideProjectType;
+        var projectType = Objects.requireNonNullElseGet(overrideProjectType, () -> detectProjectType(path));
         config.onDebug.accept("Using project type: " + projectType);
         Volume app = new Volume("/app");
-        client.pullImageCmd("openjdk:" + javaVersion).exec(new ResultCallback.Adapter<>() {
+        client.pullImageCmd(String.format(projectType.getImage(), javaVersion)).exec(new ResultCallback.Adapter<>() {
             private long time = System.currentTimeMillis();
 
             @Override
             public void onNext(PullResponseItem object) {
-                if (System.currentTimeMillis() - time < 500) {
+                if (System.currentTimeMillis() - time < 250) {
                     return;
                 }
                 time = System.currentTimeMillis();
