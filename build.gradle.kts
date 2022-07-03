@@ -11,6 +11,8 @@ repositories {
     mavenCentral()
 }
 
+java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+
 val dockerJavaVersion = "3.2.13"
 
 dependencies {
