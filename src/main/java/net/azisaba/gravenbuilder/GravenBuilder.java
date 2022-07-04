@@ -116,7 +116,7 @@ public class GravenBuilder {
                         config.onStderr.accept(new String(frame.getPayload()).trim());
                     }
                 }
-            }).awaitCompletion();
+            }).awaitCompletion(config.timeout, config.timeoutUnit);
             List<File> artifacts = new ArrayList<>();
             for (File file : GravenBuilderUtil.findAllFiles(path)) {
                 if (file.lastModified() > timeBeforeStart && config.isArtifact.test(file)) {
