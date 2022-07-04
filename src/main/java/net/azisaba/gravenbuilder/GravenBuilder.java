@@ -107,7 +107,7 @@ public class GravenBuilder {
             long timeBeforeStart = System.currentTimeMillis();
             client.startContainerCmd(container.getId()).exec();
             config.onDebug.accept("Started container: " + container.getId());
-            client.logContainerCmd(container.getId()).withStdOut(true).withStdErr(true).withTail(100).withFollowStream(true).exec(new ResultCallback.Adapter<>() {
+            var timedOut = client.logContainerCmd(container.getId()).withStdOut(true).withStdErr(true).withTail(100).withFollowStream(true).exec(new ResultCallback.Adapter<>() {
                 @Override
                 public void onNext(Frame frame) {
                     if (frame.getStreamType() == StreamType.STDOUT) {
@@ -117,6 +117,9 @@ public class GravenBuilder {
                     }
                 }
             }).awaitCompletion(config.timeout, config.timeoutUnit);
+            if (timedOut) {
+                config.onDebug.accept("Terminated due to exceeding timeout of " + config.timeout + " " + config.timeoutUnit.name());
+            }
             List<File> artifacts = new ArrayList<>();
             for (File file : GravenBuilderUtil.findAllFiles(path)) {
                 if (file.lastModified() > timeBeforeStart && config.isArtifact.test(file)) {
