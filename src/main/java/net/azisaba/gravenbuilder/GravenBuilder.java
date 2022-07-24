@@ -117,7 +117,7 @@ public class GravenBuilder {
                     }
                 }
             }).awaitCompletion(config.timeout, config.timeoutUnit);
-            if (timedOut) {
+            if (!timedOut) {
                 config.onDebug.accept("Terminated due to exceeding timeout of " + config.timeout + " " + config.timeoutUnit.name());
             }
             List<File> artifacts = new ArrayList<>();
