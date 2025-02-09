@@ -4,7 +4,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public final class ProjectType {
-    public static final @NotNull ProjectType GRADLE = new ProjectType("gradle", "openjdk:%d", "/bin/bash", "-c", "./gradlew --project-cache-dir /tmp/.gradle_cache build --stacktrace --info");
+    public static final @NotNull ProjectType GRADLE = new ProjectType("gradle", "eclipse-temurin:%d-jdk", "/bin/bash", "-c", "./gradlew --project-cache-dir /tmp/.gradle_cache build --stacktrace --info");
     public static final @NotNull ProjectType MAVEN = new ProjectType("maven", "maven:3-eclipse-temurin-%d-focal", "/bin/bash", "-c", "mvn package");
 
     private final String name;
