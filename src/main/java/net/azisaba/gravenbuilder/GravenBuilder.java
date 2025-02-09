@@ -60,6 +60,7 @@ public class GravenBuilder {
         var projectType = Objects.requireNonNullElseGet(overrideProjectType, () -> detectProjectType(path));
         config.onDebug.accept("Using project type: " + projectType);
         Volume app = new Volume("/app");
+        Volume tmp = new Volume("/tmp");
         String imageName = String.format(projectType.getImage(), javaVersion);
         client.pullImageCmd(imageName).exec(new ResultCallback.Adapter<>() {
             private long time = System.currentTimeMillis();
@@ -98,6 +99,7 @@ public class GravenBuilder {
         config.onDebug.accept("Starting build");
         CreateContainerResponse container = client.createContainerCmd(imageName)
                 .withVolumes(app)
+                .withHostConfig(HostConfig.newHostConfig().withBinds(new Bind(System.getProperty("java.io.tmpdir"), tmp)))
                 .withHostConfig(HostConfig.newHostConfig().withBinds(new Bind(path.getAbsolutePath(), app)))
                 .withWorkingDir("/app")
                 .withCmd(projectType.getCmd())

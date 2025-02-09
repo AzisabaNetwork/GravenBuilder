@@ -13,7 +13,7 @@ repositories {
 
 java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 
-val dockerJavaVersion = "3.2.13"
+val dockerJavaVersion = "3.4.1"
 
 dependencies {
     implementation("com.github.docker-java:docker-java-core:$dockerJavaVersion")
