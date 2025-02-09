@@ -98,9 +98,8 @@ public class GravenBuilder {
         }).awaitCompletion();
         config.onDebug.accept("Starting build");
         CreateContainerResponse container = client.createContainerCmd(imageName)
-                .withVolumes(app)
-                .withHostConfig(HostConfig.newHostConfig().withBinds(new Bind(System.getProperty("java.io.tmpdir"), tmp)))
-                .withHostConfig(HostConfig.newHostConfig().withBinds(new Bind(path.getAbsolutePath(), app)))
+                .withVolumes(app, tmp)
+                .withHostConfig(HostConfig.newHostConfig().withBinds(new Bind(System.getProperty("java.io.tmpdir"), tmp), new Bind(path.getAbsolutePath(), app)))
                 .withWorkingDir("/app")
                 .withCmd(projectType.getCmd())
                 .exec();
