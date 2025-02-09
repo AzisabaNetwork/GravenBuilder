@@ -32,6 +32,12 @@ public final class ProjectType {
         return name;
     }
 
+    /**
+     * @deprecated Use {@link #withCustomImageCmd(String, String...)} instead
+     * @param cmd
+     * @return
+     */
+    @Deprecated
     @Contract(value = "_ -> new", pure = true)
     public static @NotNull ProjectType withCustomCmd(@NotNull String @NotNull ... cmd) {
         return withCustomImageCmd("openjdk:17", cmd);
